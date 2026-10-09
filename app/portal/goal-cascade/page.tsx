@@ -250,15 +250,71 @@ export default function GoalCascadeWorkspacePage() {
     setAutoSaveMsg("Đã áp dụng mẫu " + dept.name);
   };
 
+  // Clear to blank form for students to type from scratch
+  const handleClearToBlank = () => {
+    if (confirm("Bạn có chắc chắn muốn xóa dữ liệu mẫu để bắt đầu điền bài làm mới từ đầu?")) {
+      setPlan((prev) => ({
+        ...prev,
+        step1_goal: "",
+        step2_results: [
+          {
+            id: "kr_blank_1",
+            indicator: "",
+            unit: "",
+            baseline: "",
+            target: "",
+            deadline: "",
+          },
+        ],
+        step3_6_works: [
+          {
+            id: "w_blank_1",
+            what: "",
+            why: "",
+            who: "",
+            coOwners: "",
+            how: "",
+            whenStart: "",
+            whenEnd: "",
+            where: "",
+            metric: "",
+          },
+        ],
+        step7_monitoring: {
+          indicator: "",
+          frequency: "",
+          source: "",
+          reviewer: "",
+          greenThreshold: "",
+          yellowThreshold: "",
+          redThreshold: "",
+          deviationAction: "",
+        },
+        simulationQ2: {
+          actualScore: "82% (Thời gian chờ 41 phút)",
+          status: "RED",
+          rootCause: "",
+          correctiveActions: "",
+        },
+      }));
+      setAutoSaveMsg("Đã chuyển sang biểu mẫu trống");
+    }
+  };
+
+  // Reload reference sample
+  const handleReloadSample = () => {
+    handleSelectDepartment(selectedDeptIndex);
+  };
+
   // Add new Key Result
   const handleAddKeyResult = () => {
     const newKR: KeyResult = {
       id: "kr_" + Date.now(),
-      indicator: "Chỉ số đo lường mới",
-      unit: "%",
-      baseline: "0",
-      target: "100",
-      deadline: "2027-12-31",
+      indicator: "",
+      unit: "",
+      baseline: "",
+      target: "",
+      deadline: "",
     };
     setPlan((prev) => ({
       ...prev,
@@ -277,15 +333,15 @@ export default function GoalCascadeWorkspacePage() {
   const handleAddWorkItem = () => {
     const newWork: WorkItem = {
       id: "w_" + Date.now(),
-      what: "Nội dung công việc mới (What)",
-      why: "Lý do và mục đích gắn với kết quả then chốt (Why)",
-      who: "Chức danh người chịu trách nhiệm chính (Who)",
-      coOwners: "Đơn vị phối hợp",
-      how: "Nguồn lực, cách làm và ngân sách ước tính (How)",
-      whenStart: "2027-01-01",
-      whenEnd: "2027-06-30",
-      where: "Địa điểm / Khoa phòng thực hiện (Where)",
-      metric: "Chỉ số nghiệm thu hoàn thành",
+      what: "",
+      why: "",
+      who: "",
+      coOwners: "",
+      how: "",
+      whenStart: "",
+      whenEnd: "",
+      where: "",
+      metric: "",
     };
     setPlan((prev) => ({
       ...prev,
@@ -427,7 +483,7 @@ export default function GoalCascadeWorkspacePage() {
               <p className="text-xs text-teal-100 mt-0.5">
                 Mục tiêu Bệnh viện Phương Đông 2027:{" "}
                 <strong className="text-white underline decoration-amber-400 font-bold">
-                  Tỷ lệ người bệnh hài lòng ≥ 90% (Baseline 84%)
+                  Tỷ lệ người bệnh hài lòng ≥ 90% (Hiện trạng 84%)
                 </strong>
               </p>
             </div>
@@ -487,14 +543,22 @@ export default function GoalCascadeWorkspacePage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-slate-600 border-t md:border-t-0 pt-2 md:pt-0">
-            <div>
-              Quản lý: <strong className="text-slate-900">{plan.managerName}</strong>
-            </div>
-            <div>
-              Mã HV: <span className="font-mono font-bold text-[#00685E]">{plan.studentCode}</span>
-            </div>
-            <div className="text-emerald-700 font-medium">● {autoSaveMsg}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleClearToBlank}
+              className="text-xs font-bold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3 py-1.5 rounded transition"
+              title="Xóa trắng để tự nhập bài làm của nhóm từ đầu"
+            >
+              🧹 Biểu mẫu trống
+            </button>
+            <button
+              onClick={handleReloadSample}
+              className="text-xs font-bold text-[#00685E] hover:text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-300 px-3 py-1.5 rounded transition"
+              title="Nạp lại gợi ý mẫu tham khảo ngành y tế"
+            >
+              💡 Gợi ý mẫu
+            </button>
+            <div className="text-emerald-700 font-medium text-xs ml-2">● {autoSaveMsg}</div>
           </div>
         </div>
 
@@ -628,7 +692,7 @@ export default function GoalCascadeWorkspacePage() {
               <div className="space-y-4 max-w-4xl">
                 <div className="bg-teal-50 border-l-4 border-[#00685E] p-3 text-xs text-teal-900">
                   <strong>Nguyên tắc Bước 2 (SMART):</strong> Xác định rõ các chỉ số đo lường định lượng: Đạt bao nhiêu?
-                  Mốc hiện tại (Baseline)? Giá trị đích cần đạt? Thời hạn hoàn thành?
+                  Mức hiện tại? Mức cần đạt? Thời hạn hoàn thành?
                 </div>
 
                 <div className="space-y-3">
@@ -650,6 +714,7 @@ export default function GoalCascadeWorkspacePage() {
                           <label className="block text-[11px] font-semibold text-slate-600 mb-1">Tên chỉ số đo lường</label>
                           <input
                             type="text"
+                            placeholder="Ví dụ: Tỷ lệ hài lòng người bệnh / Thời gian chờ"
                             value={kr.indicator}
                             onChange={(e) => {
                               const updated = [...plan.step2_results];
@@ -663,6 +728,7 @@ export default function GoalCascadeWorkspacePage() {
                           <label className="block text-[11px] font-semibold text-slate-600 mb-1">Đơn vị tính</label>
                           <input
                             type="text"
+                            placeholder="%, Phút..."
                             value={kr.unit}
                             onChange={(e) => {
                               const updated = [...plan.step2_results];
@@ -673,9 +739,10 @@ export default function GoalCascadeWorkspacePage() {
                           />
                         </div>
                         <div className="md:col-span-2">
-                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Baseline</label>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Mức hiện tại</label>
                           <input
                             type="text"
+                            placeholder="Hiện tại"
                             value={kr.baseline}
                             onChange={(e) => {
                               const updated = [...plan.step2_results];
@@ -686,11 +753,11 @@ export default function GoalCascadeWorkspacePage() {
                           />
                         </div>
                         <div className="md:col-span-3">
-                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Đích & Thời hạn</label>
+                          <label className="block text-[11px] font-semibold text-slate-600 mb-1">Mức cần đạt</label>
                           <div className="flex gap-1.5">
                             <input
                               type="text"
-                              placeholder="Đích"
+                              placeholder="Mức cần đạt"
                               value={kr.target}
                               onChange={(e) => {
                                 const updated = [...plan.step2_results];
@@ -1236,7 +1303,7 @@ export default function GoalCascadeWorkspacePage() {
               </div>
               <h3 className="text-base font-bold mt-2">Mục tiêu 2027: Tỷ lệ người bệnh hài lòng chung đạt ≥ 90%</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-xs text-teal-100 border-t border-teal-700/60 pt-2">
-                <div>Baseline hiện tại: <strong>84%</strong></div>
+                <div>Mức hiện tại: <strong>84%</strong></div>
                 <div>Hạn chót: <strong>31/12/2027</strong></div>
                 <div>Chủ trì: <strong>Ban Giám đốc BV</strong></div>
                 <div>Độ phủ mục tiêu: <strong className="text-amber-300">5 Khối/Khoa phòng</strong></div>
