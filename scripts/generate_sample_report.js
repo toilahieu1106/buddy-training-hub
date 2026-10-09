@@ -10,7 +10,7 @@ const BRAND_PRIMARY = "00685E";   // Xanh Ngọc Bích / Deep Teal
 const BRAND_ACCENT = "004D46";    // Xanh Teal đậm
 const BRAND_LIGHT = "F0F7F6";     // Xanh ngọc rất nhạt cho dòng xen kẽ
 const BORDER_COLOR = "D0DDD8";    // Viền nhẹ hài hòa
-const FONT_FAMILY = "Inter";
+const FONT_FAMILY = "Lexend";
 
 async function main() {
   const course = await prisma.course.findFirst({

@@ -8,7 +8,7 @@ const BRAND_PRIMARY = "00685E"; // Xanh Ngọc Bích / Deep Teal Phương Đông
 const BRAND_ACCENT = "004D46";  // Xanh Teal đậm
 const BRAND_LIGHT = "F0F7F6";   // Xanh ngọc rất nhạt xen kẽ
 const BORDER_COLOR = "D0DDD8";
-const FONT_FAMILY = "Inter";
+const FONT_FAMILY = "Lexend";
 
 export async function GET(req: NextRequest) {
   try {

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Space_Mono } from "next/font/google";
+import { Lexend, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const lexend = Lexend({
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["vietnamese", "latin"],
-  variable: "--font-inter",
+  variable: "--font-lexend",
   display: "swap",
 });
 
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${inter.variable} ${spaceMono.variable}`}>
+    <html lang="vi" className={`${lexend.variable} ${spaceMono.variable}`}>
       <body className="min-h-screen antialiased text-slate-900 bg-slate-50 font-sans selection:bg-slate-800 selection:text-white">
         {children}
       </body>
