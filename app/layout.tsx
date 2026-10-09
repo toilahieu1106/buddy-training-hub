@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className={`${plusJakartaSans.variable} ${spaceMono.variable}`}>
-      <body className="min-h-screen antialiased text-slate-900 bg-slate-50 font-sans selection:bg-slate-800 selection:text-white">
+      <body className={`${plusJakartaSans.className} min-h-screen antialiased text-slate-900 bg-slate-50 selection:bg-slate-800 selection:text-white`}>
         {children}
       </body>
     </html>
