@@ -9,7 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-plus-jakarta-sans)", "system-ui", "sans-serif"],
+        sans: ["var(--font-heading)", "var(--font-body)", "system-ui", "sans-serif"],
+        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
+        body: ["var(--font-body)", "system-ui", "sans-serif"],
         mono: ["var(--font-space-mono)", "monospace"],
       },
       colors: {

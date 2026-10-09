@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ["vietnamese", "latin"],
-  variable: "--font-plus-jakarta-sans",
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["vietnamese", "latin"],
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -27,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${plusJakartaSans.variable} ${spaceMono.variable}`}>
+    <html lang="vi" className={`${plusJakartaSans.variable} ${inter.variable} ${spaceMono.variable}`}>
       <body className="min-h-screen antialiased text-slate-900 bg-slate-50 font-sans selection:bg-slate-800 selection:text-white">
         {children}
       </body>
