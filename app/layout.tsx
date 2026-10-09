@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Nunito, Space_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const nunito = Nunito({
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["vietnamese", "latin"],
-  variable: "--font-nunito",
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
 });
 
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${nunito.variable} ${spaceMono.variable}`}>
+    <html lang="vi" className={`${plusJakartaSans.variable} ${spaceMono.variable}`}>
       <body className="min-h-screen antialiased text-slate-900 bg-slate-50 font-sans selection:bg-slate-800 selection:text-white">
         {children}
       </body>
