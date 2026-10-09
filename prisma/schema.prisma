@@ -1,0 +1,162 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  passwordHash  String
+  fullName      String
+  role          String     @default("TRAINER") // ADMIN, TRAINER, HOSPITAL_VIEWER
+  status        String     @default("ACTIVE")  // ACTIVE, INACTIVE
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  reviews       Review[]
+  auditLogs     AuditLog[]
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  name        String
+  clientName  String     @default("Bệnh viện Đa khoa Phương Đông")
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  status      String     @default("ACTIVE") // ACTIVE, COMPLETED, ARCHIVED
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  sessions    Session[]
+  students    Student[]
+}
+
+model Session {
+  id                      String       @id @default(cuid())
+  courseId                String
+  course                  Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  sessionNumber           Int          // 1, 2, 3, 4
+  title                   String       // Ví dụ: Buổi 1: Kỹ năng Điều hành & Quản trị Y tế
+  date                    String       // YYYY-MM-DD
+  startTime               String       // HH:mm (Ví dụ: 08:00)
+  endTime                 String       // HH:mm (Ví dụ: 11:30)
+  location                String?      // Hội trường A - BV Phương Đông
+  trainerName             String?
+  lateThresholdMins       Int          @default(15) // Sau 15p tính đi trễ
+  earlyLeaveThresholdMins Int          @default(15) // Check-out trước 15p tính về sớm
+  checkInStatus           String       @default("CLOSED") // OPEN, CLOSED
+  checkOutStatus          String       @default("CLOSED") // OPEN, CLOSED
+  qrToken                 String?      // Dynamic QR token
+  sessionCode             String       // Mã buổi học nhập tay (VD: BVPD-B1)
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  attendances             Attendance[]
+  assignments             Assignment[]
+}
+
+model Student {
+  id              String       @id @default(cuid())
+  courseId        String
+  course          Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentCode     String       // Mã học viên 6 ký tự (VD: K7M4PX) - unique per course
+  fullName        String
+  title           String?      // Trưởng khoa Cấp cứu, Bác sĩ CKII...
+  department      String?      // Khoa Ngoại, Khoa Nhi, Phòng TCCB...
+  managementLevel String?      // Quản lý cấp cao, Quản lý cấp trung
+  email           String?
+  phone           String?
+  status          String       @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  attendances     Attendance[]
+  submissions     Submission[]
+
+  @@unique([courseId, studentCode])
+}
+
+model Attendance {
+  id             String    @id @default(cuid())
+  sessionId      String
+  session        Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  studentId      String
+  student        Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  checkInAt      DateTime?
+  checkInStatus  String?   // ON_TIME (Đúng giờ), LATE (Đi trễ), ABSENT (Vắng)
+  checkOutAt     DateTime?
+  checkOutStatus String?   // COMPLETED (Hoàn thành), EARLY_LEAVE (Về sớm), MISSING_CHECKOUT (Thiếu check-out)
+  durationMins   Int?      // Tổng phút tham dự
+  source         String    @default("QR_SCAN") // QR_SCAN, MANUAL_ADMIN
+  deviceHash     String?
+  note           String?   // Ghi chú của Admin nếu sửa thủ công
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([sessionId, studentId])
+}
+
+model Assignment {
+  id            String       @id @default(cuid())
+  sessionId     String
+  session       Session      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  title         String       // Tiêu đề bài tập
+  description   String?      // Yêu cầu chi tiết
+  type          String       @default("IN_SESSION") // IN_SESSION (Trong buổi), POST_SESSION (Sau đào tạo)
+  deadline      DateTime?
+  allowedFormat String       @default("BOTH") // LINK, FILE, BOTH
+  isRequired    Boolean      @default(true)
+  status        String       @default("ACTIVE") // ACTIVE, DRAFT, CLOSED
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  submissions   Submission[]
+}
+
+model Submission {
+  id           String     @id @default(cuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  version      Int        @default(1)
+  type         String     // LINK, FILE
+  contentUrl   String?    // Link Google Drive / Docs...
+  filePath     String?    // Đường dẫn file lưu trữ nội bộ
+  fileName     String?    // Tên file gốc
+  fileSize     Int?       // Dung lượng bytes
+  note         String?    // Lời nhắn của học viên
+  submittedAt  DateTime   @default(now())
+  isLate       Boolean    @default(false)
+  status       String     @default("SUBMITTED") // SUBMITTED, NEED_REVISION, REVIEWED
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  reviews      Review[]
+}
+
+model Review {
+  id            String     @id @default(cuid())
+  submissionId  String
+  submission    Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  reviewerId    String
+  reviewer      User       @relation(fields: [reviewerId], references: [id])
+  publicComment String?    // Nhận xét công khai gửi học viên
+  internalNote  String?    // Ghi chú nội bộ Buddy
+  grade         String?    // XUAT_SAC, DAT, CAN_CAI_THIEN
+  reviewedAt    DateTime   @default(now())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  actorName  String   // Tên người thực hiện
+  action     String   // MANUAL_CHECKIN, REISSUE_CODE, IMPORT_STUDENTS, REVIEW_SUBMISSION...
+  entityType String   // Student, Attendance, Submission, Session...
+  entityId   String?
+  details    String?  // JSON mô tả chi tiết hoặc lý do
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+}

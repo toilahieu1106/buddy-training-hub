@@ -1,0 +1,196 @@
+﻿Yêu cầu công cụ Phân rã mục tiêu & Lập kế hoạch 5W1H (Goal Cascade Workspace)
+Dự án: Đào tạo quản lý cấp trung và cao – Bệnh viện Phương Đông | Đơn vị đề xuất: Công ty Buddy | Phiên bản 1.0 – 09/10/2026 | Module mở rộng của hệ thống Điểm danh & Nộp bài (Buddy Training Hub)
+1. Tổng quan
+1.1 Bối cảnh
+Trong buổi học về lập kế hoạch, học viên được giới thiệu quy trình 7 bước lập kế hoạch thực hiện (Mục tiêu → Kết quả → Công việc → Người phụ trách → Nguồn lực → Tiến độ → Theo dõi), trong đó bước 3–6 áp dụng 5W1H. Mục tiêu của buổi là giúp các quản lý tự phân rã mục tiêu từ cấp bệnh viện xuống khoa/phòng, bộ phận và cá nhân, rồi theo dõi, đánh giá hoàn thành chỉ tiêu năm.
+Vì học viên là các y bác sĩ có năng lực cao và ít kiên nhẫn với bài giảng một chiều, buổi học cần một công cụ để họ làm thật, thấy kết quả ngay và tương tác theo nhóm, thay vì ghi chép trên giấy hoặc Google Sheet rời rạc.
+1.2 Bài toán thực hành chính
+Mục tiêu năm tới của bệnh viện: trên 90% người bệnh hài lòng về dịch vụ. Học viên phải phân rã mục tiêu này theo đúng quy trình 7 bước và 5W1H đã học.
+1.3 Mục tiêu của công cụ
+Số hóa đúng quy trình 7 bước và khung 5W1H để học viên làm theo từng bước, không bị lạc.
+Cho phép phân rã nhiều cấp trên một cây trực quan: Bệnh viện → Khoa/Phòng → Bộ phận → Cá nhân.
+Tự động kiểm tra chất lượng (SMART, đủ trường 5W1H, logic liên kết giữa các cấp) để học viên nhận phản hồi tức thì.
+Có bước theo dõi và mô phỏng review giữa năm để học viên thực hành đánh giá hoàn thành chỉ tiêu.
+Giúp giảng viên điều phối lớp, nhìn tiến độ từng nhóm theo thời gian thực và so sánh, nhận xét ngay trong buổi.
+Dùng chung nền tảng với hệ thống điểm danh/nộp bài: học viên đăng nhập bằng mã học viên, bài làm gắn tự động theo mã.
+1.4 Phạm vi
+Trong phạm vi: cấu hình bài thực hành, nhóm làm việc, cây phân rã, biểu mẫu 7 bước/5W1H, kiểm tra tự động, mô phỏng theo dõi, dashboard giảng viên, nhận xét, xuất báo cáo, tích hợp với bài tập sau đào tạo.
+Ngoài phạm vi (giai đoạn 1): kết nối dữ liệu thật từ HIS/HRM/khảo sát hài lòng của bệnh viện, thay thế phần mềm quản trị KPI của bệnh viện, chấm điểm hoàn toàn tự động bằng AI, ứng dụng mobile native.
+2. Phương pháp nghiệp vụ cần số hóa
+Bước 1 – Mục tiêu: Phải đạt gì? Một câu phát biểu mục tiêu rõ ràng cho từng nút trong cây.
+Bước 2 – Kết quả: Đạt bao nhiêu? Khi nào? Gồm chỉ số, đơn vị, giá trị hiện tại (baseline), giá trị đích và thời hạn.
+Bước 3 – Công việc (What, Why): Cần làm những gì và vì sao.
+Bước 4 – Người phụ trách (Who): Ai chịu trách nhiệm. Quy tắc cốt lõi: mỗi công việc có đúng một người chịu trách nhiệm chính.
+Bước 5 – Nguồn lực (How): Cần gì để thực hiện (nhân lực, ngân sách, thiết bị, hệ thống, đào tạo) và làm thế nào.
+Bước 6 – Tiến độ (When, Where): Khi nào bắt đầu và hoàn thành, thực hiện ở đâu (khoa/phòng, khu vực, kênh).
+Bước 7 – Theo dõi: Đo và review thế nào: chỉ số theo dõi, tần suất, nguồn dữ liệu, người review, ngưỡng cảnh báo, hành động khi lệch kế hoạch.
+Nguyên tắc phân rã: kết quả của cấp dưới phải đóng góp trực tiếp vào kết quả của cấp trên (kết quả của cấp trên là mục tiêu của cấp dưới).
+3. Vai trò người dùng
+Học viên: đăng nhập bằng mã học viên (như hệ thống điểm danh), làm việc trên nút/nhóm được giao, xem phản hồi và kết quả mô phỏng.
+Trưởng nhóm (học viên được chỉ định): như học viên, có thêm quyền chốt phiên bản nộp của nhóm và phân công nút trong cây cho thành viên.
+Giảng viên/Admin: cấu hình bài thực hành, chia nhóm, mở khóa từng bước, theo dõi live, nhận xét, bơm kịch bản mô phỏng, xuất báo cáo.
+Đại diện bệnh viện (tùy chọn): xem kết quả tổng hợp, không chỉnh sửa.
+4. Kịch bản sử dụng trong buổi học
+Khởi động (5–10 phút): học viên check-in, giảng viên chiếu mục tiêu gốc &quot;≥ 90% người bệnh hài lòng&quot; và cây phân rã còn trống lên màn hình.
+Chia nhóm và nhận vai (5 phút): mỗi nhóm đại diện một khoa/phòng hoặc một khối (ví dụ Khám bệnh, Điều dưỡng, CSKH, Hành chính–Quản trị, Tài chính–Kế toán, Quản lý chất lượng). Hệ thống hiển thị nhóm và nút được giao.
+Thực hành theo từng bước (30–45 phút): giảng viên mở khóa lần lượt Bước 1–2, Bước 3–6 (5W1H), Bước 7. Mỗi bước có đồng hồ đếm ngược. Nhóm cùng chỉnh sửa trực tiếp, hệ thống nhắc lỗi (thiếu số liệu, thiếu người phụ trách…).
+Phân rã tiếp xuống bộ phận/cá nhân (15–20 phút): từ kết quả của khoa/phòng, nhóm tạo các nút con cho bộ phận và cá nhân, gán người phụ trách cụ thể.
+Trình bày và so sánh (15 phút): giảng viên chiếu cây của từng nhóm, so sánh mức độ phủ mục tiêu, nhận xét trực tiếp trên hệ thống.
+Mô phỏng theo dõi giữa năm (15 phút): giảng viên bơm số liệu giả định (ví dụ quý 2 khoa Khám bệnh chỉ đạt 82%). Nhóm cập nhật tiến độ, xem cây chuyển màu cảnh báo và viết hành động khắc phục.
+Kết thúc: khóa bài, check-out, giao bài tập sau đào tạo: hoàn thiện kế hoạch cho khoa/phòng thật của học viên (nộp qua hệ thống).
+5. Yêu cầu chức năng
+Mức ưu tiên: P0 = bắt buộc cho MVP, P1 = nên có, P2 = có thể làm sau. Mã yêu cầu bắt đầu bằng GC (Goal Cascade).
+5.1 Cấu hình bài thực hành (Admin)
+GC-01 (P0): Admin tạo &quot;Bài thực hành phân rã mục tiêu&quot; gắn với một buổi học của khóa. Gồm: tên, mô tả, mục tiêu gốc (nội dung, chỉ số, giá trị đích, thời hạn, baseline), năm kế hoạch.
+GC-02 (P0): Admin định nghĩa các cấp tổ chức dùng trong bài (mặc định 4 cấp: Bệnh viện, Khoa/Phòng, Bộ phận, Cá nhân) và danh sách khoa/phòng/bộ phận mẫu để học viên chọn.
+GC-03 (P0): Admin cấu hình các bước 1–7 được bật/tắt, thứ tự mở khóa, thời gian gợi ý cho từng bước.
+GC-04 (P1): Admin cung cấp bối cảnh bổ sung (tài liệu, số liệu giả định như điểm hài lòng hiện tại theo từng nhóm yếu tố: thời gian chờ, thái độ giao tiếp, thông tin tư vấn, cơ sở vật chất, thủ tục) hiển thị trong khung &quot;Dữ kiện bài toán&quot; bên cạnh biểu mẫu.
+GC-05 (P1): Nhân bản bài thực hành cho khóa/khách hàng khác; lưu thành mẫu.
+GC-06 (P1): Thư viện chủ đề mẫu: hài lòng người bệnh, giảm thời gian chờ, giảm sự cố y khoa, tăng doanh thu dịch vụ… để tái sử dụng cho các khóa sau.
+5.2 Chia nhóm và phân vai
+GC-07 (P0): Admin chia học viên vào nhóm (thủ công, theo khoa/phòng của học viên hoặc ngẫu nhiên), mỗi nhóm có tên và trưởng nhóm.
+GC-08 (P0): Mỗi nhóm được giao một nút khởi đầu trong cây (ví dụ &quot;Khoa Khám bệnh&quot;). Học viên chỉ chỉnh sửa trong phạm vi nhóm của mình, vẫn xem được cây tổng của lớp (chế độ đọc).
+GC-09 (P1): Học viên trong nhóm nhận vai: người ghi chép, người phản biện, người trình bày; vai xoay vòng giữa các bước để mọi người cùng tham gia.
+GC-10 (P1): Chế độ làm cá nhân hoặc theo nhóm do Admin chọn cho từng bài.
+5.3 Cây phân rã mục tiêu
+GC-11 (P0): Hiển thị cây phân rã nhiều cấp: nút gốc là mục tiêu bệnh viện, các nút con là mục tiêu khoa/phòng, bộ phận, cá nhân. Cho thêm/sửa/xóa/di chuyển nút bằng kéo thả.
+GC-12 (P0): Mỗi nút hiển thị tóm tắt: tên mục tiêu, chỉ số/giá trị đích, người phụ trách, trạng thái hoàn thiện (số bước đã xong trên 7) và màu cảnh báo.
+GC-13 (P0): Nhấn vào nút để mở biểu mẫu 7 bước (mục 5.4). Có thể thu gọn/mở rộng nhánh, phóng to, chiếu toàn màn hình cho giảng viên.
+GC-14 (P0): Liên kết &quot;đóng góp vào&quot;: mỗi nút con gắn với đúng một kết quả của nút cha mà nó đóng góp. Hệ thống hiển thị rõ nút nào chưa gắn (nút mồ côi) và kết quả cha nào chưa có nút con nào đóng góp (khoảng trống phủ mục tiêu).
+GC-15 (P0): Hiển thị tổng hợp đóng góp: tổng mức đóng góp của các nút con so với giá trị đích của nút cha (ví dụ các khoa cùng đóng góp để tổng thể đạt ≥ 90%).
+GC-16 (P1): Chế độ xem khác: danh sách dạng bảng, sơ đồ tổ chức, và &quot;bản đồ phủ&quot; (ma trận mục tiêu x khoa/phòng).
+GC-17 (P1): Hoàn tác/làm lại, lịch sử thay đổi theo nút, khôi phục phiên bản.
+5.4 Biểu mẫu kế hoạch 7 bước và 5W1H
+Mỗi nút có một biểu mẫu dạng từng bước (wizard) hoặc xem toàn bộ trên một trang, bám đúng thứ tự trong slide. Mỗi trường có câu hỏi gợi ý và ví dụ.
+GC-18 (P0): Bước 1 – Mục tiêu: mô tả mục tiêu của nút (văn bản), cấp tổ chức, nút cha liên kết.
+GC-19 (P0): Bước 2 – Kết quả: một hoặc nhiều kết quả; mỗi kết quả gồm tên chỉ số, đơn vị, giá trị hiện tại, giá trị đích, thời hạn. Thể hiện rõ &quot;Đạt bao nhiêu? Khi nào?&quot;.
+GC-20 (P0): Bước 3 – Công việc (What, Why): danh sách công việc, mỗi việc có What (làm gì) và Why (vì sao, gắn với kết quả nào ở Bước 2).
+GC-21 (P0): Bước 4 – Người phụ trách (Who): mỗi công việc có đúng một người chịu trách nhiệm chính, chọn từ danh sách vị trí/chức danh của cấp đó; cho phép thêm người phối hợp (tùy chọn).
+GC-22 (P0): Bước 5 – Nguồn lực (How): cách thực hiện, nguồn lực cần (nhân lực, ngân sách ước tính, thiết bị/hệ thống, đào tạo, phối hợp từ phòng ban khác).
+GC-23 (P0): Bước 6 – Tiến độ (When, Where): ngày bắt đầu, ngày hoàn thành, mốc quan trọng, địa điểm/đơn vị thực hiện. Có chế độ xem dòng thời gian (Gantt đơn giản).
+GC-24 (P0): Bước 7 – Theo dõi: chỉ số theo dõi, tần suất đo (tuần/tháng/quý), nguồn dữ liệu, người đo, người review, ngưỡng xanh/vàng/đỏ, hành động khi lệch.
+GC-25 (P0): Bảng 5W1H tổng hợp cho từng nút: mỗi dòng một công việc với đủ các cột What, Why, Who, How, When, Where; sửa trực tiếp trên bảng.
+GC-26 (P0): Lưu tự động (autosave) từng thay đổi, hiển thị trạng thái &quot;Đã lưu&quot;.
+GC-27 (P1): Lời nhắc và ví dụ đóng/mở được cho từng bước (hướng dẫn nhanh), có thể bật &quot;chế độ học&quot; cho người mới.
+GC-28 (P1): Gợi ý nhanh các yếu tố tác động đến hài lòng người bệnh (thời gian chờ, thái độ giao tiếp, thông tin tư vấn, cơ sở vật chất, thủ tục, ăn uống…) để học viên chọn làm khung phân rã.
+5.5 Kiểm tra chất lượng và logic liên kết
+GC-29 (P0): Kiểm tra đủ trường: mỗi bước báo thiếu cụ thể (ví dụ &quot;Công việc 2 chưa có người phụ trách&quot;). Chỉ cho đánh dấu hoàn thành bước khi các trường bắt buộc đã đủ.
+GC-30 (P0): Kiểm tra SMART tự động bằng luật: mục tiêu/kết quả phải có con số, đơn vị, thời hạn; thời hạn không vượt quá thời hạn của nút cha; công việc phải có hạn chót.
+GC-31 (P0): Kiểm tra logic liên kết: giá trị đích các nút con đóng góp phải hợp lý so với nút cha (cảnh báo nếu tổng đóng góp thấp hơn đích cha); mỗi công việc có đúng một Who; người phụ trách thuộc đúng cấp/đơn vị; tiến độ nằm trong khung thời gian của nút cha.
+GC-32 (P0): Bảng điểm chất lượng cho từng nút (ví dụ 0–100, theo bộ tiêu chí Admin cấu hình) và danh sách lỗi cần sửa. Cảnh báo là gợi ý, học viên vẫn có thể lưu.
+GC-33 (P1): Cờ &quot;cần thảo luận&quot; để học viên đánh dấu điểm chưa chắc chắn gửi giảng viên.
+5.6 Theo dõi và mô phỏng review giữa năm (Bước 7)
+GC-34 (P0): Học viên nhập số liệu thực tế theo kỳ (tuần/tháng/quý) cho từng kết quả; hệ thống tính % hoàn thành so với kế hoạch và gán màu xanh/vàng/đỏ theo ngưỡng.
+GC-35 (P0): Tổng hợp tiến độ từ dưới lên: tiến độ nút con cộng dồn lên nút cha theo trọng số do Admin hoặc học viên đặt; cây đổi màu theo kết quả tổng hợp.
+GC-36 (P0): Admin tạo &quot;Kịch bản mô phỏng&quot;: bộ số liệu giả định theo kỳ cho từng nhóm hoặc toàn lớp, ví dụ &quot;Quý 2: điểm hài lòng khoa Khám bệnh 82%, thời gian chờ trung bình tăng 15%&quot;. Admin bấm &quot;Phát kịch bản&quot; để đẩy đến học viên cùng lúc.
+GC-37 (P0): Khi nhận kịch bản, học viên phải viết phân tích nguyên nhân và kế hoạch điều chỉnh (công việc mới theo 5W1H) cho các kết quả bị lệch.
+GC-38 (P1): Biểu đồ xu hướng theo kỳ, so sánh kế hoạch và thực tế, so sánh giữa các khoa/phòng/nhóm.
+GC-39 (P1): Biểu mẫu review định kỳ: kết quả, lý do lệch, quyết định (giữ nguyên/điều chỉnh/hỗ trợ thêm), người ra quyết định, hạn xử lý.
+GC-40 (P2): Bơm sự kiện bất ngờ (đổi nhân sự, cắt giảm ngân sách, dịch bệnh tăng ca) để học viên thực hành điều chỉnh kế hoạch.
+5.7 Điều phối lớp học (Giảng viên)
+GC-41 (P0): Bảng điều khiển live: mọi nhóm, % hoàn thiện 7 bước, điểm chất lượng, lỗi phổ biến, người đang online, hoạt động mới nhất.
+GC-42 (P0): Mở/khóa từng bước cho toàn lớp hoặc từng nhóm, kèm đồng hồ đếm ngược hiển thị trên màn hình học viên và màn hình chiếu.
+GC-43 (P0): Giảng viên xem sâu vào nút của bất kỳ nhóm, chiếu cây của nhóm lên màn hình, bình luận ngay trên từng trường.
+GC-44 (P1): Chế độ &quot;so sánh bên cạnh nhau&quot; hai nhóm để thảo luận cách phân rã khác nhau.
+GC-45 (P1): Bình chọn/đánh giá chéo giữa các nhóm theo tiêu chí ngắn (rõ ràng, khả thi, đóng góp đủ vào mục tiêu), hiển thị kết quả tức thì.
+GC-46 (P1): Thông báo nhanh đến toàn lớp hoặc nhóm cụ thể (ví dụ &quot;còn 5 phút&quot;).
+GC-47 (P2): Chế độ ẩn danh nhóm khi trình bày để tránh áp lực với cấp quản lý cao.
+5.8 Nhận xét và đánh giá
+GC-48 (P0): Admin/giảng viên nhận xét theo nút và theo từng trường, có thể kèm điểm hoặc xếp loại theo rubric (ví dụ tính rõ ràng của mục tiêu, tính đo lường, tính khả thi, tính liên kết giữa các cấp, tính đầy đủ 5W1H, chất lượng theo dõi).
+GC-49 (P0): Học viên xem nhận xét ngay trên nút tương ứng, có thể trả lời/cập nhật.
+GC-50 (P1): Thư viện nhận xét mẫu; nhận xét hàng loạt cho nhiều nhóm.
+GC-51 (P1): Chốt phiên bản &quot;nộp&quot; của nhóm khi hết giờ; admin có thể mở khóa chỉnh sửa lại.
+5.9 Xuất, nộp bài và tích hợp
+GC-52 (P0): Dùng chung đăng nhập bằng mã học viên với hệ thống điểm danh; bài thực hành hiển thị trong trang cá nhân của học viên như một bài tập của buổi.
+GC-53 (P0): Tự động tạo bản nộp (Submission) từ kế hoạch của nhóm/cá nhân khi hết giờ hoặc khi trưởng nhóm bấm nộp; Admin xem được trong màn hình nhận xét bài chung.
+GC-54 (P0): Xuất kế hoạch ra Excel (bảng 5W1H và kết quả) và PDF (cây phân rã kèm biểu mẫu tóm tắt) cho từng nút và toàn cây.
+GC-55 (P1): Bài tập sau đào tạo: học viên mở lại kế hoạch của mình, áp dụng cho khoa/phòng thật, chỉnh sửa và nộp bản hoàn thiện trước hạn; Admin nhận xét như các bài tập khác.
+GC-56 (P1): Xuất bộ ảnh cây phân rã (PNG) và bản tóm tắt một trang cho Ban lãnh đạo bệnh viện.
+GC-57 (P1): Báo cáo tham gia: ai chỉnh sửa gì, mức độ đóng góp của từng thành viên trong nhóm (số thao tác, số trường đã điền), giúp giảng viên ghi nhận.
+5.10 Trợ lý AI (tùy chọn)
+GC-58 (P2): Nút &quot;Hỏi AI coach&quot;: AI đọc nội dung nút và đưa nhận xét về SMART, gợi ý bổ sung công việc/nguồn lực, chỉ ra điểm thiếu logic. Chỉ là gợi ý, học viên tự quyết định chấp nhận.
+GC-59 (P2): Giảng viên bật/tắt AI theo bài. Có thể dùng làm điểm nhấn kết nối với buổi học AI trước đó (học viên dùng AI để rà soát kế hoạch).
+GC-60 (P2): Cảnh báo không nhập thông tin cá nhân người bệnh; dữ liệu gửi AI không lưu để huấn luyện mô hình, cần thống nhất với bệnh viện trước khi bật.
+5.11 Phân quyền và nhật ký
+GC-61 (P0): Học viên chỉ sửa dữ liệu của nhóm mình; xem được cây tổng ở chế độ đọc nếu Admin cho phép. Giảng viên/Admin xem tất cả.
+GC-62 (P0): Nhật ký thay đổi: ai sửa gì, lúc nào trên từng trường; Admin xem được để giải quyết tranh chấp trong nhóm.
+GC-63 (P0): Chống ghi đè: khi hai người cùng sửa một trường, hệ thống hiển thị ai đang sửa và xử lý xung đột (khóa mềm theo trường hoặc hợp nhất).
+6. Yêu cầu phi chức năng
+Cộng tác thời gian thực: cập nhật hiển thị dưới 2 giây giữa các thành viên cùng nhóm và trên dashboard giảng viên; dùng WebSocket hoặc tương đương.
+Quy mô: ít nhất 60 học viên, 12 nhóm làm đồng thời mỗi lớp; thiết kế dự phòng 150 người.
+Thiết bị: tối ưu cho laptop và tablet (màn hình ≥ 10 inch) khi làm bài; điện thoại dùng ở chế độ xem và nhập nhanh. Trình duyệt: Chrome, Edge, Safari bản mới.
+Dễ dùng: không cần hướng dẫn quá 5 phút; giao diện tiếng Việt, rõ ràng, màu sắc chuyên nghiệp phù hợp nhóm quản lý cấp cao; có chế độ chiếu màn hình (chữ lớn).
+Độ tin cậy: autosave, khôi phục khi mất mạng ngắn; hiển thị trạng thái kết nối; sao lưu hằng ngày; lưu dự phòng cục bộ trên trình duyệt để không mất dữ liệu khi rớt mạng.
+Bảo mật và riêng tư: HTTPS, mã hóa dữ liệu lưu trữ, phân quyền theo vai trò; tuân thủ Nghị định 13/2023/NĐ-CP; không lưu dữ liệu người bệnh; số liệu trong bài là số liệu giả định hoặc đã ẩn danh.
+Mở rộng: cấu trúc chủ đề, cấp tổ chức, bước và rubric là dữ liệu cấu hình để dùng lại cho các chủ đề khác (ví dụ KPI nhân sự, chất lượng, tài chính).
+7. Mô hình dữ liệu gợi ý
+Tái sử dụng Course, Session, Student, Assignment, Submission, Review của hệ thống điểm danh. Bổ sung:
+PlanExercise: id, session_id, assignment_id, tên, năm kế hoạch, mục tiêu gốc (nội dung, chỉ số, đích, hạn, baseline), cấu hình bước, trạng thái.
+Team: id, exercise_id, tên, trưởng nhóm, nút khởi đầu, trạng thái nộp.
+TeamMember: team_id, student_id, vai trò.
+OrgLevel: id, exercise_id, tên cấp, thứ tự (Bệnh viện, Khoa/Phòng, Bộ phận, Cá nhân).
+GoalNode: id, exercise_id, team_id, parent_id, level_id, tên/đơn vị, phát biểu mục tiêu (Bước 1), đóng góp vào KeyResult nào của cha, trạng thái hoàn thiện, điểm chất lượng.
+KeyResult: id, node_id, tên chỉ số, đơn vị, baseline, giá trị đích, hạn, trọng số.
+WorkItem: id, node_id, key_result_id, what, why, who_owner (một người), co_owners, how (nguồn lực/cách làm), resource_items (loại, mô tả, chi phí ước tính), when_start, when_end, where, mốc, trạng thái.
+MonitoringPlan: id, node_id, chỉ số theo dõi, tần suất, nguồn dữ liệu, người đo, người review, ngưỡng xanh/vàng/đỏ, hành động khi lệch.
+ProgressRecord: id, key_result_id, kỳ, giá trị thực tế, % hoàn thành, trạng thái màu, ghi chú, nguồn (học viên nhập/kịch bản).
+Scenario: id, exercise_id, tên, kỳ, dữ liệu mô phỏng theo nhóm/nút, thời điểm phát.
+Rubric / RubricCriterion: tiêu chí, trọng số, mô tả mức.
+Comment / Review: node_id hoặc trường, người nhận xét, nội dung, điểm, thời gian.
+ChangeLog: actor, đối tượng, trường, giá trị trước/sau, thời gian.
+8. Màn hình chính
+Học viên/Nhóm
+Trang bài thực hành: đề bài, dữ kiện bài toán, đồng hồ bước hiện tại.
+Cây phân rã: thêm/sửa/di chuyển nút, nhìn màu cảnh báo.
+Biểu mẫu 7 bước cho từng nút (kèm bảng 5W1H tổng hợp).
+Bảng kiểm tra chất lượng và danh sách lỗi cần sửa.
+Màn hình theo dõi: nhập số liệu thực tế, xem đèn giao thông, viết nguyên nhân và hành động điều chỉnh.
+Nhận xét và kết quả sau buổi, bản xuất.
+Giảng viên/Admin
+Cấu hình bài thực hành, cấp tổ chức, rubric, kịch bản.
+Chia nhóm, giao nút.
+Dashboard live toàn lớp và màn hình chiếu cây phân rã.
+Điều khiển mở khóa bước, đồng hồ, phát kịch bản.
+Màn hình xem sâu từng nhóm, nhận xét, chấm rubric.
+Báo cáo và xuất dữ liệu.
+9. Quy tắc nghiệp vụ và tình huống đặc biệt
+Mỗi công việc có đúng một người phụ trách chính (Who); nhiều người phối hợp là tùy chọn.
+Mỗi nút con liên kết đúng một kết quả của nút cha; một kết quả cha có thể có nhiều nút con đóng góp.
+Kết quả luôn có đủ: chỉ số, đơn vị, giá trị đích, thời hạn. Mục tiêu dạng &quot;nâng cao chất lượng&quot; không số liệu bị cảnh báo.
+Học viên vắng buổi: có thể làm bài bù cá nhân với bản sao bài thực hành, Admin nhận xét như bài sau đào tạo.
+Học viên vào muộn: tự động được thêm vào nhóm đang thiếu người hoặc nhóm mới theo chỉ định giảng viên.
+Mất mạng: dữ liệu giữ lại trên thiết bị, tự đồng bộ khi có mạng; cảnh báo nếu có xung đột.
+Hết giờ: bài khóa tự động, chỉ Admin mở khóa.
+Nhóm không đồng nhất ý kiến: trưởng nhóm có quyền chốt; nhật ký ghi rõ người chốt.
+Chế độ chiếu màn hình ẩn thông tin nhạy cảm (ví dụ tên cá nhân trong cột người phụ trách) nếu Admin bật.
+10. Dữ liệu mẫu để dựng và kiểm thử
+Chỉ dùng cho môi trường thử nghiệm; số liệu không phải số liệu thật của bệnh viện, cần bệnh viện cung cấp số thật nếu muốn thực hành sát thực tế.
+Mục tiêu bệnh viện năm 2027: tỷ lệ người bệnh hài lòng ≥ 90% (baseline giả định 84%).
+Nhóm yếu tố tác động (cấp Khoa/Phòng hoặc khối): (1) Thời gian chờ khám và làm thủ tục; (2) Thái độ giao tiếp của nhân viên; (3) Thông tin tư vấn và giải thích cho người bệnh; (4) Cơ sở vật chất, vệ sinh, an toàn; (5) Thủ tục hành chính và thanh toán.
+Ví dụ nút Khoa Khám bệnh: kết quả &quot;rút thời gian chờ trung bình từ 45 xuống ≤ 30 phút trước 30/09/2027&quot;; công việc &quot;triển khai đặt hẹn trước và phân luồng&quot;, Why &quot;thời gian chờ là nguyên nhân chính gây không hài lòng&quot;, Who &quot;Trưởng khoa Khám bệnh&quot;, How &quot;phần mềm đặt hẹn, 2 điều dưỡng điều phối, ngân sách ước tính…&quot;, When &quot;01/02–30/06/2027&quot;, Where &quot;khu khám ngoại trú&quot;; theo dõi &quot;đo thời gian chờ hằng tuần, review hằng tháng, ngưỡng đỏ khi > 38 phút&quot;.
+Kịch bản mô phỏng Quý 2: hài lòng khoa Khám bệnh 82%, khối Điều dưỡng 88%, Phòng CSKH 91%; thời gian chờ trung bình 41 phút.
+11. Tiêu chí nghiệm thu (MVP)
+Admin tạo được bài thực hành với mục tiêu gốc ≥ 90% hài lòng, chia 6 nhóm và giao nút cho từng nhóm.
+Học viên đăng nhập bằng mã học viên, thấy đúng nhóm và nút của mình, không phải nhập thông tin cá nhân.
+Nhóm điền được đủ 7 bước cho một nút và bảng 5W1H với mỗi công việc có đúng một người phụ trách; dữ liệu tự lưu.
+Cây phân rã hiển thị ít nhất 4 cấp; thêm/sửa/kéo thả nút hoạt động; hệ thống chỉ ra nút mồ côi và khoảng trống phủ mục tiêu.
+Kiểm tra SMART và logic liên kết hiển thị lỗi cụ thể; điểm chất lượng tính đúng theo rubric.
+Hai thành viên cùng sửa một nhóm thấy thay đổi của nhau dưới 2 giây; xung đột được xử lý rõ ràng.
+Giảng viên thấy dashboard live đúng tiến độ, mở khóa từng bước và đồng hồ hoạt động đồng bộ trên máy học viên.
+Phát kịch bản mô phỏng: học viên nhận số liệu, cây đổi màu đúng ngưỡng, tiến độ cộng dồn lên cấp cha chính xác; học viên nộp được phân tích nguyên nhân và hành động điều chỉnh.
+Admin nhận xét/chấm rubric được trên từng nút; học viên xem được nhận xét.
+Xuất Excel (5W1H và kết quả) và PDF (cây phân rã) đúng dữ liệu; bài nộp tự xuất hiện trong hệ thống nộp bài.
+Kiểm thử tải: 60 học viên, 12 nhóm làm đồng thời 30 phút không lỗi nghiêm trọng.
+12. Gợi ý lộ trình triển khai
+Giai đoạn 1 – MVP (trước buổi học): GC-01 đến GC-03, GC-07, GC-08, GC-11 đến GC-15, GC-18 đến GC-26, GC-29 đến GC-32, GC-34 đến GC-37, GC-41 đến GC-43, GC-48, GC-49, GC-52 đến GC-54, GC-61 đến GC-63.
+Giai đoạn 2: các mục P1 như dữ kiện bài toán, thư viện mẫu, chế độ xem bản đồ phủ, so sánh nhóm, bình chọn chéo, biểu đồ xu hướng, bài tập sau đào tạo, báo cáo đóng góp.
+Giai đoạn 3 (tùy chọn): AI coach, sự kiện bất ngờ, ẩn danh nhóm, chủ đề mẫu mở rộng.
+13. Điểm cần chốt trước khi phát triển
+Số liệu hài lòng hiện tại và cách bệnh viện đo (nội trú/ngoại trú, thang điểm, tần suất khảo sát): dùng số thật hay giả định?
+Số học viên mỗi buổi, thời lượng thực hành và cách chia nhóm (theo khoa/phòng thật hay trộn cấp quản lý)?
+Cơ cấu tổ chức thật của Bệnh viện Phương Đông (khoa/phòng/bộ phận, chức danh) có được cung cấp để nạp sẵn danh sách?
+Phân rã 4 cấp đến cá nhân trong cùng một buổi hay chia làm 2 buổi (đến khoa/phòng trong lớp, đến bộ phận/cá nhân ở bài sau đào tạo)?
+Học viên dùng thiết bị nào (laptop riêng, tablet, hay máy trường cấp) và mạng phòng học có ổn định?
+Có dùng AI coach không, và bệnh viện có đồng ý dữ liệu bài làm gửi tới dịch vụ AI không?
+Rubric chấm điểm do Buddy xây dựng hay thống nhất với bệnh viện? Điểm có dùng để xét hoàn thành khóa không?
+Có cần xuất kết quả cho Ban lãnh đạo bệnh viện và định dạng ưa thích (PDF, PowerPoint, Excel)?
