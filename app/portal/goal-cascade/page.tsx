@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { GOAL_CASCADE_GROUPS } from "@/lib/goal-cascade-groups";
 
 interface WorkItem {
   id: string;
@@ -53,7 +54,7 @@ interface GoalPlan {
 
 const SAMPLE_DEPARTMENTS = [
   {
-    name: "Nhóm 1: Khám bệnh & Cận lâm sàng",
+    name: GOAL_CASCADE_GROUPS[0],
     goal: "Rút ngắn thời gian chờ khám và trả kết quả xét nghiệm/CĐHA, tối ưu luồng đón tiếp ngoại trú",
     target: "Thời gian chờ khám ≤ 30 phút, trả kết quả CLS ≤ 45 phút, hài lòng ≥ 92%",
     baseline: "Thời gian chờ khám 45 phút, CLS 60 phút, hài lòng 84%",
@@ -85,7 +86,7 @@ const SAMPLE_DEPARTMENTS = [
     ],
   },
   {
-    name: "Nhóm 2: Cấp cứu - Ngoại - ICU",
+    name: GOAL_CASCADE_GROUPS[1],
     goal: "Tối ưu hóa thời gian tiếp nhận cấp cứu, chuyển mổ khẩn và đảm bảo an toàn người bệnh tuyệt đối",
     target: "Thời gian tiếp nhận đến chẩn đoán cấp cứu ≤ 15 phút, tỷ lệ an toàn phẫu thuật 100%",
     baseline: "Thời gian xử lý trung bình 25 phút",
@@ -105,7 +106,7 @@ const SAMPLE_DEPARTMENTS = [
     ],
   },
   {
-    name: "Nhóm 3: Khối Nội - Nhi - Sản",
+    name: GOAL_CASCADE_GROUPS[2],
     goal: "Nâng cao chất lượng điều trị nội trú, tư vấn chu đáo và chăm sóc chuyên sâu mẹ & bé",
     target: "Tỷ lệ người bệnh nội trú hài lòng ≥ 95%, 0 khiếu nại về tư vấn chuyên môn",
     baseline: "Hài lòng 87%, còn phản ánh thiếu thông tin hướng dẫn dùng thuốc",
@@ -125,7 +126,7 @@ const SAMPLE_DEPARTMENTS = [
     ],
   },
   {
-    name: "Nhóm 4: Điều dưỡng & KSNK",
+    name: GOAL_CASCADE_GROUPS[3],
     goal: "Chuẩn hóa văn hóa giao tiếp AIDET, thái độ phục vụ và kiểm soát nhiễm khuẩn buồng bệnh",
     target: "100% điều dưỡng tuân thủ tiêu chuẩn giao tiếp AIDET, hài lòng điều dưỡng ≥ 95%",
     baseline: "Hài lòng 86%, còn 5 phản ánh thái độ/tháng",
@@ -145,7 +146,7 @@ const SAMPLE_DEPARTMENTS = [
     ],
   },
   {
-    name: "Nhóm 5: CSKH - Tiếp đón & Viện phí",
+    name: GOAL_CASCADE_GROUPS[4],
     goal: "Nâng cấp dịch vụ đón tiếp 5 sao, tinh gọn thủ tục BHYT và giải quyết triệt để 100% khiếu nại trong 24h",
     target: "Tỷ lệ tiếp đón hài lòng 98%, giải quyết khiếu nại trong 24h đạt 100%",
     baseline: "Hài lòng 89%, xử lý khiếu nại mất 48h-72h",
@@ -165,7 +166,7 @@ const SAMPLE_DEPARTMENTS = [
     ],
   },
   {
-    name: "Nhóm 6: QLCL & ASAHI / Khối Công ty",
+    name: GOAL_CASCADE_GROUPS[5],
     goal: "Giám sát thời gian thực các chỉ số chất lượng toàn viện, tối ưu vận hành chuỗi dịch vụ ASAHI & Công ty",
     target: "0 sự cố y khoa nghiêm trọng, 100% khuyến nghị cải tiến được triển khai",
     baseline: "Giám sát thủ công cuối tháng, phát hiện chậm",
@@ -195,6 +196,7 @@ export default function GoalCascadeWorkspacePage() {
   const [autoSaveMsg, setAutoSaveMsg] = useState<string>("Đã tự động lưu nháp");
   const [activeTimer, setActiveTimer] = useState<number>(1800); // 30 mins
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
+  const [teacherComment, setTeacherComment] = useState<string>("");
 
   // Form State
   const [plan, setPlan] = useState<GoalPlan>({
@@ -444,36 +446,50 @@ export default function GoalCascadeWorkspacePage() {
 
   const { score, checks } = calculateQualityScore();
 
-  // Submit plan to API
+  // Mã học viên đăng nhập ở Cổng học viên
+  useEffect(() => {
+    const saved = localStorage.getItem("buddy_student_code") || "";
+    setPlan((prev) => ({ ...prev, studentCode: saved }));
+  }, []);
+
+  // Tải nhận xét của giảng viên cho nhóm đang chọn
+  useEffect(() => {
+    setTeacherComment("");
+    fetch(`/api/goal-cascade?groupIndex=${selectedDeptIndex}`)
+      .then((r) => r.json())
+      .then((d) => setTeacherComment(d.plan?.comment || ""))
+      .catch(() => {});
+  }, [selectedDeptIndex]);
+
+  // Submit plan to API (trưởng nhóm nộp 1 bản cho cả nhóm)
   const handleSubmitPlan = async () => {
+    if (!plan.studentCode) {
+      alert("Bạn chưa đăng nhập mã học viên. Vui lòng vào Cổng học viên để đăng nhập trước khi nộp.");
+      return;
+    }
     setIsSubmitting(true);
     try {
-      // Find session 2 assignment ID or submit via API
-      const formData = new FormData();
-      formData.append("studentCode", plan.studentCode);
-      formData.append("type", "LINK");
-      formData.append(
-        "contentUrl",
-        `https://buddy-training-hub.vercel.app/portal/goal-cascade?dept=${encodeURIComponent(
-          plan.department
-        )}&code=${plan.studentCode}`
-      );
-      formData.append(
-        "note",
-        `[GOAL CASCADE WORKSPACE - BUỔI 2] Kế hoạch phân rã 5W1H của ${plan.department} - Quản lý: ${plan.managerName} - Điểm chất lượng: ${score}/100.`
-      );
-
-      // Attempt submit to backend
-      const res = await fetch("/api/student/submit", {
+      const res = await fetch("/api/goal-cascade", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentCode: plan.studentCode,
+          groupIndex: selectedDeptIndex,
+          plan,
+          checks,
+          score,
+        }),
       });
-
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Nộp bài thất bại");
+        return;
+      }
       setSubmitSuccess(true);
       setAutoSaveMsg("Đã nộp bài thực hành Buổi 2 thành công!");
     } catch (e) {
       console.error(e);
-      setSubmitSuccess(true); // Fallback optimistic for in-class
+      alert("Không kết nối được máy chủ. Vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -581,6 +597,13 @@ export default function GoalCascadeWorkspacePage() {
             <div className="text-emerald-700 font-medium text-xs ml-2">● {autoSaveMsg}</div>
           </div>
         </div>
+
+        {teacherComment && (
+          <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-6 text-xs">
+            <div className="font-bold text-amber-900 uppercase mb-1">Nhận xét của Giảng viên cho nhóm</div>
+            <p className="text-amber-950 whitespace-pre-line">{teacherComment}</p>
+          </div>
+        )}
 
         {/* Navigation Tabs */}
         <div className="flex border-b border-slate-200 bg-white rounded-t-lg px-2 pt-2 gap-1 overflow-x-auto">

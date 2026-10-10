@@ -160,3 +160,17 @@ model AuditLog {
   ipAddress  String?
   createdAt  DateTime @default(now())
 }
+
+// Bài thực hành Goal Cascade (Buổi 2): mỗi nhóm 1 bản nộp, trưởng nhóm nộp đè bản cũ
+model GoalCascadePlan {
+  id              String   @id @default(cuid())
+  groupIndex      Int      @unique // 0..5 = Nhóm 1..6
+  groupName       String
+  data            Json     // { plan, checks }
+  score           Int
+  submittedByCode String
+  submittedByName String
+  submittedAt     DateTime @default(now())
+  comment         String?  // Nhận xét của giảng viên
+  updatedAt       DateTime @updatedAt
+}

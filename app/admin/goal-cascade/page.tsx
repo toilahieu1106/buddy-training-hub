@@ -1,95 +1,74 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { GOAL_CASCADE_GROUPS } from "@/lib/goal-cascade-groups";
 
-interface TeamProgress {
-  id: string;
-  name: string;
-  leader: string;
+interface SubmittedPlan {
+  groupIndex: number;
+  groupName: string;
   score: number;
-  currentStep: number;
-  status: "IN_PROGRESS" | "SUBMITTED" | "REVIEWED";
-  stepStatus: boolean[]; // 7 steps
-  keyResult: string;
-  q2Status: "RESOLVED" | "PENDING";
+  submittedByCode: string;
+  submittedByName: string;
+  submittedAt: string;
+  comment: string | null;
+  data: {
+    plan: {
+      step1_goal: string;
+      step2_results: { indicator: string; unit: string; baseline: string; target: string; deadline: string }[];
+      step3_6_works: { what: string; who: string; whenStart: string; whenEnd: string }[];
+      simulationQ2: { rootCause: string; correctiveActions: string };
+    };
+    checks: { label: string; passed: boolean }[];
+  };
 }
 
 export default function AdminGoalCascadePage() {
   const [unlockedStep, setUnlockedStep] = useState<number>(7);
   const [scenarioBroadcasted, setScenarioBroadcasted] = useState<boolean>(true);
-  const [selectedTeam, setSelectedTeam] = useState<string>("t1");
+  const [selectedGroup, setSelectedGroup] = useState<number>(0);
+  const [plans, setPlans] = useState<SubmittedPlan[]>([]);
+  const [commentDraft, setCommentDraft] = useState<string>("");
+  const [savingComment, setSavingComment] = useState<boolean>(false);
 
-  const [teams, setTeams] = useState<TeamProgress[]>([
-    {
-      id: "t1",
-      name: "Nhóm 1 - Khoa Khám bệnh",
-      leader: "BS. CKII Nguyễn Văn An",
-      score: 95,
-      currentStep: 7,
-      status: "SUBMITTED",
-      stepStatus: [true, true, true, true, true, true, true],
-      keyResult: "Rút ngắn thời gian chờ từ 45p → 30p, hài lòng ≥ 92%",
-      q2Status: "RESOLVED",
-    },
-    {
-      id: "t2",
-      name: "Nhóm 2 - Khối Điều dưỡng",
-      leader: "ThS. Nguyễn Thị Lan",
-      score: 90,
-      currentStep: 7,
-      status: "SUBMITTED",
-      stepStatus: [true, true, true, true, true, true, true],
-      keyResult: "100% điều dưỡng đạt chuẩn giao tiếp AIDET, hài lòng ≥ 95%",
-      q2Status: "RESOLVED",
-    },
-    {
-      id: "t3",
-      name: "Nhóm 3 - Phòng Chăm sóc Khách hàng",
-      leader: "ThS. Trương Mỹ Xuyên",
-      score: 85,
-      currentStep: 6,
-      status: "IN_PROGRESS",
-      stepStatus: [true, true, true, true, true, true, false],
-      keyResult: "Tỷ lệ tiếp đón hài lòng 98%, xử lý khiếu nại trong 24h",
-      q2Status: "PENDING",
-    },
-    {
-      id: "t4",
-      name: "Nhóm 4 - Khoa Cấp cứu & Ngoại khoa",
-      leader: "BS. CKI Phan Quốc Uy",
-      score: 92,
-      currentStep: 7,
-      status: "SUBMITTED",
-      stepStatus: [true, true, true, true, true, true, true],
-      keyResult: "Tiếp nhận & chẩn đoán cấp cứu ≤ 15 phút, an toàn trước mổ",
-      q2Status: "RESOLVED",
-    },
-    {
-      id: "t5",
-      name: "Nhóm 5 - Phòng Quản lý Chất lượng & KHTH",
-      leader: "BS. CKI Hoàng Thị Hoa",
-      score: 88,
-      currentStep: 7,
-      status: "SUBMITTED",
-      stepStatus: [true, true, true, true, true, true, true],
-      keyResult: "Dashboard cảnh báo sớm chỉ số y khoa toàn viện",
-      q2Status: "RESOLVED",
-    },
-    {
-      id: "t6",
-      name: "Nhóm 6 - Phòng Tổ chức Cán bộ & Đào tạo",
-      leader: "ThS. Đặng Tuấn Khang",
-      score: 82,
-      currentStep: 5,
-      status: "IN_PROGRESS",
-      stepStatus: [true, true, true, true, true, false, false],
-      keyResult: "100% cán bộ hoàn thành tập huấn năng lực điều hành",
-      q2Status: "PENDING",
-    },
-  ]);
+  const loadPlans = () =>
+    fetch("/api/goal-cascade")
+      .then((r) => r.json())
+      .then((d) => setPlans(d.plans || []))
+      .catch(() => {});
 
-  const activeTeamData = teams.find((t) => t.id === selectedTeam) || teams[0];
+  // Tải bài nộp thật, tự làm mới mỗi 15 giây trong buổi học
+  useEffect(() => {
+    loadPlans();
+    const t = setInterval(loadPlans, 15000);
+    return () => clearInterval(t);
+  }, []);
+
+  const planOf = (idx: number) => plans.find((p) => p.groupIndex === idx);
+  const active = planOf(selectedGroup);
+
+  useEffect(() => {
+    setCommentDraft(planOf(selectedGroup)?.comment || "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedGroup, plans.length]);
+
+  const avgScore = plans.length ? (plans.reduce((s, p) => s + p.score, 0) / plans.length).toFixed(1) : "0";
+
+  const handleSaveComment = async () => {
+    setSavingComment(true);
+    const res = await fetch("/api/goal-cascade", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ groupIndex: selectedGroup, comment: commentDraft }),
+    });
+    setSavingComment(false);
+    if (!res.ok) {
+      alert((await res.json()).error || "Lưu nhận xét thất bại");
+      return;
+    }
+    await loadPlans();
+    alert("Đã lưu nhận xét. Nhóm sẽ thấy khi mở lại Workspace.");
+  };
 
   return (
     <div className="space-y-6">
@@ -158,17 +137,19 @@ export default function AdminGoalCascadePage() {
           </div>
         </div>
 
-        {/* Aggregate Stats */}
+        {/* Aggregate Stats (dữ liệu thật) */}
         <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex items-center justify-between">
           <div>
             <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tiến độ nộp bài</div>
-            <div className="text-2xl font-black text-[#00685E] font-mono mt-1">4 / 6 Nhóm</div>
-            <div className="text-[11px] text-slate-500">67% hoàn thành toàn bộ 7 bước</div>
+            <div className="text-2xl font-black text-[#00685E] font-mono mt-1">
+              {plans.length} / {GOAL_CASCADE_GROUPS.length} Nhóm
+            </div>
+            <div className="text-[11px] text-slate-500">Tự làm mới mỗi 15 giây</div>
           </div>
           <div className="text-right">
             <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Điểm chất lượng TB</div>
-            <div className="text-2xl font-black text-emerald-700 font-mono mt-1">88.6 / 100</div>
-            <div className="text-[11px] text-emerald-700">Đạt chuẩn SMART y tế</div>
+            <div className="text-2xl font-black text-emerald-700 font-mono mt-1">{avgScore} / 100</div>
+            <div className="text-[11px] text-slate-500">Trên các nhóm đã nộp</div>
           </div>
         </div>
 
@@ -199,118 +180,154 @@ export default function AdminGoalCascadePage() {
           </div>
 
           <div className="space-y-2">
-            {teams.map((team) => (
-              <div
-                key={team.id}
-                onClick={() => setSelectedTeam(team.id)}
-                className={`p-3.5 rounded-lg border cursor-pointer transition ${
-                  selectedTeam === team.id
-                    ? "border-2 border-[#00685E] bg-teal-50/40 shadow-sm"
-                    : "border-slate-200 bg-white hover:bg-slate-50"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-900">{team.name}</span>
-                  <span
-                    className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
-                      team.score >= 90
-                        ? "bg-emerald-100 text-emerald-800"
-                        : team.score >= 80
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-rose-100 text-rose-800"
-                    }`}
-                  >
-                    {team.score}đ
-                  </span>
-                </div>
+            {GOAL_CASCADE_GROUPS.map((name, idx) => {
+              const p = planOf(idx);
+              return (
+                <div
+                  key={name}
+                  onClick={() => setSelectedGroup(idx)}
+                  className={`p-3.5 rounded-lg border cursor-pointer transition ${
+                    selectedGroup === idx
+                      ? "border-2 border-[#00685E] bg-teal-50/40 shadow-sm"
+                      : "border-slate-200 bg-white hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-900">{name}</span>
+                    {p ? (
+                      <span
+                        className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
+                          p.score >= 90
+                            ? "bg-emerald-100 text-emerald-800"
+                            : p.score >= 80
+                            ? "bg-amber-100 text-amber-800"
+                            : "bg-rose-100 text-rose-800"
+                        }`}
+                      >
+                        {p.score}đ
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-500">
+                        Chưa nộp
+                      </span>
+                    )}
+                  </div>
 
-                <div className="text-[11px] text-slate-500 mt-1">
-                  Trưởng nhóm: <strong className="text-slate-800">{team.leader}</strong>
+                  {p && (
+                    <>
+                      <div className="text-[11px] text-slate-500 mt-1">
+                        Người nộp: <strong className="text-slate-800">{p.submittedByName}</strong> ·{" "}
+                        {new Date(p.submittedAt).toLocaleTimeString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}
+                        {p.comment ? " · Đã nhận xét" : ""}
+                      </div>
+                      {/* Tiêu chí đạt / chưa đạt */}
+                      <div className="flex items-center gap-1 mt-2.5">
+                        {p.data.checks.map((c, i) => (
+                          <span
+                            key={i}
+                            className={`h-1.5 flex-1 rounded-full ${c.passed ? "bg-[#00685E]" : "bg-slate-200"}`}
+                            title={`${c.label}: ${c.passed ? "Đạt" : "Chưa đạt"}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
-
-                <div className="text-[11px] text-slate-600 mt-1 truncate">
-                  Chỉ tiêu: {team.keyResult}
-                </div>
-
-                {/* 7 steps progress pills */}
-                <div className="flex items-center gap-1 mt-2.5">
-                  {team.stepStatus.map((done, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 flex-1 rounded-full ${
-                        done ? "bg-[#00685E]" : "bg-slate-200"
-                      }`}
-                      title={`Bước ${i + 1}: ${done ? "Đã xong" : "Chưa xong"}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
         {/* Team Detail & Grading Panel (Col 7) */}
         <div className="md:col-span-7 bg-white border border-slate-200 rounded-lg p-6 shadow-sm space-y-5">
-          <div className="flex items-center justify-between border-b pb-3">
-            <div>
-              <span className="text-[10px] font-bold bg-[#00685E] text-white px-2 py-0.5 rounded font-mono uppercase">
-                Chi tiết bài thực hành
-              </span>
-              <h3 className="text-base font-bold text-slate-900 mt-1">{activeTeamData.name}</h3>
-              <p className="text-xs text-slate-500">Người đại diện: {activeTeamData.leader}</p>
-            </div>
-            <div className="text-right">
-              <span className="text-xs text-slate-500 block">Trạng thái:</span>
-              <span className="text-xs font-bold font-mono px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">
-                {activeTeamData.status}
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Review Details */}
-          <div className="space-y-3 text-xs">
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
-                Mục tiêu & Kết quả then chốt (Bước 1 & 2):
-              </span>
-              <p className="font-semibold text-slate-800">{activeTeamData.keyResult}</p>
-            </div>
-
-            <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
-                Kế hoạch 5W1H (Bước 3 - 6):
-              </span>
-              <p className="text-slate-700">
-                Đã thiết lập đầy đủ đầu việc, người phụ trách chính (Who), nguồn lực và tiến độ hoàn thành trước Quý 3/2027.
+          <div className="border-b pb-3">
+            <span className="text-[10px] font-bold bg-[#00685E] text-white px-2 py-0.5 rounded font-mono uppercase">
+              Chi tiết bài thực hành
+            </span>
+            <h3 className="text-base font-bold text-slate-900 mt-1">{GOAL_CASCADE_GROUPS[selectedGroup]}</h3>
+            {active && (
+              <p className="text-xs text-slate-500">
+                Người nộp: {active.submittedByName} ({active.submittedByCode}) · Điểm: {active.score}/100
               </p>
-            </div>
-
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded">
-              <span className="text-[10px] font-bold text-rose-800 uppercase block mb-1">
-                Xử lý Kịch bản Mô phỏng Quý 2 (Review):
-              </span>
-              <p className="text-rose-900 font-medium">
-                Đã đề xuất phương án điều phối nhân sự tăng cường và mở thêm bàn khám cao điểm sáng.
-              </p>
-            </div>
+            )}
           </div>
 
-          {/* Instructor Feedback Input */}
-          <div className="space-y-2 pt-2 border-t">
-            <label className="block text-xs font-bold text-slate-800 uppercase">
-              Nhận xét & Đánh giá của Giảng viên Buddy:
-            </label>
-            <textarea
-              rows={3}
-              defaultValue="Nhóm phân rã mục tiêu rất sát với thực tế vận hành BV Phương Đông. Cần lưu ý bổ sung phương án dự phòng khi máy móc cận lâm sàng bảo trì."
-              className="w-full border border-slate-300 rounded p-2.5 text-xs focus:ring-1 focus:ring-[#00685E]"
-            />
-            <div className="flex justify-end gap-2 pt-1">
-              <button className="bg-[#00685E] text-white px-4 py-2 rounded text-xs font-bold uppercase tracking-wider">
-                Lưu Nhận Xét & Gửi Cho Nhóm
-              </button>
-            </div>
-          </div>
+          {!active ? (
+            <p className="text-xs text-slate-500">Nhóm này chưa nộp bài.</p>
+          ) : (
+            <>
+              <div className="space-y-3 text-xs">
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Bước 1 – Mục tiêu:</span>
+                  <p className="font-semibold text-slate-800">{active.data.plan.step1_goal || "(trống)"}</p>
+                </div>
+
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Bước 2 – Kết quả:</span>
+                  <ul className="list-disc pl-4 text-slate-700 space-y-0.5">
+                    {active.data.plan.step2_results.map((kr, i) => (
+                      <li key={i}>
+                        {kr.indicator}: {kr.baseline} → {kr.target} {kr.unit} (hạn {kr.deadline})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
+                    Bước 3–6 – Công việc 5W1H ({active.data.plan.step3_6_works.length} việc):
+                  </span>
+                  <ul className="list-disc pl-4 text-slate-700 space-y-0.5">
+                    {active.data.plan.step3_6_works.map((w, i) => (
+                      <li key={i}>
+                        {w.what} — <strong>{w.who || "chưa có Who"}</strong> ({w.whenStart} → {w.whenEnd})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded">
+                  <span className="text-[10px] font-bold text-rose-800 uppercase block mb-1">
+                    Xử lý Kịch bản Mô phỏng Quý 2:
+                  </span>
+                  <p className="text-rose-900"><strong>Nguyên nhân:</strong> {active.data.plan.simulationQ2.rootCause || "(trống)"}</p>
+                  <p className="text-rose-900 mt-1"><strong>Điều chỉnh:</strong> {active.data.plan.simulationQ2.correctiveActions || "(trống)"}</p>
+                </div>
+
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Kiểm tra tự động:</span>
+                  {active.data.checks.map((c, i) => (
+                    <div key={i} className={c.passed ? "text-emerald-700" : "text-rose-700"}>
+                      {c.passed ? "✓" : "✗"} {c.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Instructor Feedback Input */}
+              <div className="space-y-2 pt-2 border-t">
+                <label className="block text-xs font-bold text-slate-800 uppercase">
+                  Nhận xét & Đánh giá của Giảng viên Buddy:
+                </label>
+                <textarea
+                  rows={3}
+                  value={commentDraft}
+                  onChange={(e) => setCommentDraft(e.target.value)}
+                  placeholder="Nhập nhận xét cho nhóm..."
+                  className="w-full border border-slate-300 rounded p-2.5 text-xs focus:ring-1 focus:ring-[#00685E]"
+                />
+                <div className="flex justify-end gap-2 pt-1">
+                  <button
+                    onClick={handleSaveComment}
+                    disabled={savingComment}
+                    className="bg-[#00685E] text-white px-4 py-2 rounded text-xs font-bold uppercase tracking-wider disabled:opacity-60"
+                  >
+                    {savingComment ? "Đang lưu..." : "Lưu Nhận Xét & Gửi Cho Nhóm"}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
